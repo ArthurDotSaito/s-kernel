@@ -10,6 +10,13 @@ _start:
 start:
     jmp 0x7c0:step2
 
+handle_zero:
+    mov ah, 0eh
+    mov al 'A'
+    mov bx, 0x00
+    int 0x10
+    iret
+
 step2:
     cli ; Clear all interrupts 
     mov ax, 0x07C0
@@ -20,6 +27,12 @@ step2:
     mov sp, 0x7C00
 
     sti ; Enables all interrupts
+
+    mov word[ss:0x00], handle_zero
+    mov word[ss:0x02], 0x7c0
+
+    int 0
+    
 
     mov si, message
     call print
