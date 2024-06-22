@@ -12,14 +12,14 @@ start:
 
 handle_zero:
     mov ah, 0eh
-    mov al 'A'
+    mov al, 'A'
     mov bx, 0x00
     int 0x10
     iret
 
 handle_one:
     mov ah, 0eh
-    mov al 'V'
+    mov al, 'V'
     mov bx, 0x00
     int 0x10
     iret
