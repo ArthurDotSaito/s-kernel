@@ -29,8 +29,8 @@ step2:
     lgdt[gdt_descriptor]
     mov eax, cr0
     or eax, 0x1
-    mov cro, eax
-    jmop CODE_SEG:load32
+    mov cr0, eax
+    jmp CODE_SEG:load32
 
 ; GDT
 gdt_start:
