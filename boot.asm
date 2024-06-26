@@ -18,23 +18,11 @@ step2:
     mov ax, 0x00
     mov ss, ax
     mov sp, 0x7C00
-
     sti ; Enables all interrupts
 
-    mov ah, 2 ; Read one sector
-    mov al, 1 ; One sector to Read
-    mov ch, 0 ; Cylinder 0
-    mov cl, 2 ; Sector 2
-    mov dh, 0 ; Head 0
-    mov bx, buffer ; Buffer to read to
-    int 0x13
-    jc error
-
-    mov si , buffer
-    call print
-    
     jmp $
 
+    
 error:
     mov si, error_message
     call print
@@ -58,10 +46,7 @@ print_char:
     int 0x10
     ret
 
-error_message: db 'Failed to load sector', 0
-
 
 times 510 - ($ - $$) db 0
 dw 0xaa55
     
-buffer:
