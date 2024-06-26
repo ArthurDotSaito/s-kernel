@@ -1,5 +1,8 @@
-ORG 0
+ORG 0x7c00
 BITS 16
+
+CODE_SEG equ gdt_code - gdt_start
+DATA_SET equ gdt_data - gdt_start
 
 _start: 
     jmp short start
@@ -8,44 +11,61 @@ _start:
  times 33 db 0 
 
 start:
-    jmp 0x7c0:step2
+    jmp 0:step2
 
 step2:
-    cli ; Clear all interrupts 
-    mov ax, 0x07C0
+    cli             ; Clear all interrupts 
+    mov ax, 0x00
     mov ds, ax
     mov es, ax
-    mov ax, 0x00
     mov ss, ax
     mov sp, 0x7C00
-    sti ; Enables all interrupts
+    sti             ; Enables all interrupts
 
     jmp $
 
-    
-error:
-    mov si, error_message
-    call print
+.load_protected:
+    cli
+    lgdt[gdt_descriptor]
+    mov eax, cr0
+    or eax, 0x1
+    mov cro, eax
+    jmop CODE_SEG:load32
+
+; GDT
+gdt_start:
+gdt_null:
+    dd 0x0
+    dd 0x0
+
+; offset 0x8
+gdt_code:
+    dw 0xffff       ; limit low
+    dw 0            ; base 0 to 15 bits
+    db 0            ; base 16 to 23 bits
+    db 0x9a         ; access byte
+    db 11001111b    ; high 4 bit flags and low 4 bits flags
+    db 0            ; base 24 to 31 bits
+
+; offset 0x10
+gdt_data:           ; DS, SS, ES, FS, GS
+    dw 0xffff       ; limit low
+    dw 0            ; base 0 to 15 bits
+    db 0            ; base 16 to 23 bits
+    db 0x92         ; access byte
+    db 11001111b    ; high 4 bit flags and low 4 bits flags
+    db 0            ; base 24 to 31 bits
+
+gdt_end:
+
+gdt_descriptor:
+    dw gdt_end - gdt_start - 1
+    dd gdt_start
+
+[BITS 32]
+
+load32:
     jmp $
-
-print:
-    mov bx, 0
-
-.loop:
-    lodsb 
-    cmp al, 0
-    je .done
-    call print_char
-    jmp .loop
-
-.done:
-    ret
-
-print_char:
-    mov ah, 0eh
-    int 0x10
-    ret
-
 
 times 510 - ($ - $$) db 0
 dw 0xaa55
