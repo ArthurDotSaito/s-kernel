@@ -3,22 +3,22 @@ OUTPUT_FORMAT(binary)
 SECTIONS
 {
     . = 1M;
-    .text:
+    .text :
     {
         *(.text)
     }
 
-    .rodada:
+    .rodada :
     {
         *(.rodada)
     }
 
-    .data:
+    .data :
     {
         *(.data)
     }
 
-    .bss:
+    .bss :
     {
         *(COMMON)
         *(.bss)
