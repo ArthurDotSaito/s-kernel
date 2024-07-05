@@ -95,14 +95,14 @@ ata_lba_read:
     mov dx, 0x1F4
     mov eax, ebx ; Restore backup the LBA
     shr eax, 8
-    or dx, al 
+    out dx, al 
     ; Finish sending more bits to LBA
 
     ; Sending upper 16 bits from the LBA
     mov dx, 0x1F5
     mov eax, ebx ; Restore backup the LBA
     shr eax, 16
-    or dx, al 
+    out dx, al 
     ; Finish sending upper 16 bits from the LBA
 
     mov dx, 0x1F7
