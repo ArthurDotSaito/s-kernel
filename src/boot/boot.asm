@@ -68,11 +68,13 @@ gdt_descriptor:
     mov ecx, 100
     mov edi, 0x0100000
     call ata_lba_read
+    jmp CODE_SEG:0x100000
 
 ata_lba_read:
     mov ebx, eax   ; Just backup the LBA
     ; Send the highest 8bits of data from lba to disk controller
     shr eax, 24
+    or eax, 0x0E0  ; Select the master drive
     mov dx, 0x1F6
     out dx, al
     ; Finish sending highest 8bits
@@ -93,14 +95,14 @@ ata_lba_read:
     mov dx, 0x1F4
     mov eax, ebx ; Restore backup the LBA
     shr eax, 8
-    ou dx, al 
+    or dx, al 
     ; Finish sending more bits to LBA
 
     ; Sending upper 16 bits from the LBA
     mov dx, 0x1F5
     mov eax, ebx ; Restore backup the LBA
     shr eax, 16
-    ou dx, al 
+    or dx, al 
     ; Finish sending upper 16 bits from the LBA
 
     mov dx, 0x1F7
