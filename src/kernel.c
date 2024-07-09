@@ -22,5 +22,5 @@ void terminal_initialize()
 void kernel_main()
 {
     terminal_initialize();
-    video_mem[0] = terminal_make_char('B', 4);
+    video_mem[0] = terminal_make_char('B', 15);
 }
