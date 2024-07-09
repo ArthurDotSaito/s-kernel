@@ -50,11 +50,17 @@ size_t strlen(const char *str)
     return len;
 }
 
+void print(const char *str)
+{
+    size_t len = strlen(str);
+    for (int i = 0; i < len; i++)
+    {
+        terminal_writechar(str[i], 15);
+    }
+}
+
 void kernel_main()
 {
     terminal_initialize();
-    terminal_row = 0;
-    terminal_col = 0;
-    terminal_writechar('A', 15);
-    terminal_writechar('B', 15);
+    print("Hello World");
 }
