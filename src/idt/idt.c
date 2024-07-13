@@ -11,6 +11,8 @@ void idt_set(int interrupt_no, void *address)
     desc->offset_1 = (int32_t)address & 0x0000ffff;
     desc->selector = KERNEL_CODE_SELECTOR;
     desc->zero = 0x00;
+    desc->type_attr = 0xEE;
+    desc->offset_2 = (int32_t)address >> 16;
 }
 
 void idt_init()
