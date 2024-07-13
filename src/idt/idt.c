@@ -5,6 +5,8 @@
 struct idt_desc idt_descriptors[SOS_TOTAL_INTERRUPTS];
 struct idtr_desc idtr_descriptor;
 
+extern void idt_load(struct idtr_desc    *ptr);
+
 void idt_zero()
 {
     print("Division by zero error\n");
@@ -25,5 +27,8 @@ void idt_init()
     memset(idt_descriptors, 0, sizeof(idt_descriptors));
     idtr_descriptor.limit = sizeof(idt_descriptors) - 1;
     idtr_descriptor.base = idt_descriptors;
-    idt_set(0, idt_zero)
+    idt_set(0, idt_zero);
+
+    // laod the idt
+    idt_load(&idtr_descriptor);
 }
