@@ -34,7 +34,7 @@ outb:
 
     mov eax, [ebp+12]
     mov edx, [ebp+8]
-    mov dx, al
+    out dx, al
 
     pop ebp
     ret
@@ -45,7 +45,7 @@ outw:
 
     mov eax, [ebp+12]
     mov edx, [ebp+8]
-    mov dx, al
+    out dx, ax
 
     pop ebp
     ret
