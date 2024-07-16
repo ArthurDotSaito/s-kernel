@@ -26,3 +26,13 @@ insw:
     pop ebp
     ret
 
+outb:
+    push ebp
+    mov ebp, esp
+
+    mov eax, [ebp+12]
+    mov edx, [ebp+8]
+    mov dx, al
+
+    pop ebp
+    ret
