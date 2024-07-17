@@ -6,7 +6,13 @@
 struct idt_desc idt_descriptors[SOS_TOTAL_INTERRUPTS];
 struct idtr_desc idtr_descriptor;
 
+extern void init21h();
 extern void idt_load(struct idtr_desc *ptr);
+
+void init21h_handler()
+{
+    print("Keyboard pressed!\n")
+}
 
 void idt_zero()
 {
