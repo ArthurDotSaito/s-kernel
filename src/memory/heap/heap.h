@@ -25,4 +25,6 @@ struct heap
     void *saddr; // This is the first address of heap data pool.
 };
 
+int heap_create(struct heap *heap, void *ptr, void *end, struct heap_table *table);
+
 #endif
