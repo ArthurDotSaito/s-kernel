@@ -2,7 +2,7 @@
 #include "kernel.h"
 #include <stdbool.h>
 #include "status.h"
-#include "memory.h"
+#include "memory/memory.h"
 
 static int heap_validate_table(void *ptr, void *end, struct heap_table *table)
 {
@@ -67,12 +67,35 @@ static uint32_t heap_align_value_to_upper(uint32_t val)
     return val;
 }
 
-void *heap_malloc(size_t size)
+void *heap_malloc_blocks(struct heap *heap, uint32_t total_blocks)
 {
-    return 0;
+    void *address = 0;
+
+    int start_block = heap_get_start_block(heap, total_blocks);
+
+    if (start_block < 0)
+    {
+        goto out;
+    }
+
+    address = heap_block_to_address(heap, start_block);
+
+    // Mark blocks as allocated
+    heap_mark_blocks_taken(heap, start_block, total_blocks);
+out:
+    return address;
 }
 
-void *heap_free(void *ptr)
+void *heap_malloc(struct heap *heap, size_t size)
+{
+    size_t aligned_size = heap_align_value_to_upper(size);
+
+    uint32_t total_blocks = aligned_size / SOS_HEAP_BLOCK_SIZE;
+
+    return heap_malloc_blocks(heap, total_blocks);
+}
+
+void *heap_free(struct heap *heap, void *ptr)
 {
     return 0;
 }
