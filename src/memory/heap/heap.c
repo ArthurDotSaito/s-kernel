@@ -67,6 +67,48 @@ static uint32_t heap_align_value_to_upper(uint32_t val)
     return val;
 }
 
+static int heap_get_entry_type(HEAP_BLOCK_TABLE_ENTRY entry)
+{
+    return entry & 0x0f;
+}
+
+int heap_get_start_block(struct heap *heap, uint32_t total_blocks)
+{
+    struct heap_table *table = heap->table;
+    int current_block = 0;
+    int start_block = -1;
+
+    for (size_t i = 0; i < table->total; i++)
+    {
+        if (heap_get_entry_type(table->entries[i] != HEAP_BLOCK_ENTRY_FREE))
+        {
+            current_block = 0;
+            start_block = -1;
+            continue;
+        }
+
+        // Case: first block
+        if (start_block == -1)
+        {
+            start_block = i;
+        }
+
+        current_block++;
+
+        if (start_block == total_blocks)
+        {
+            break;
+        }
+    }
+
+    if (start_block == -1)
+    {
+        return -ENOMEM;
+    }
+
+    return start_block;
+}
+
 void *heap_malloc_blocks(struct heap *heap, uint32_t total_blocks)
 {
     void *address = 0;
