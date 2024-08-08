@@ -54,3 +54,25 @@ int heap_create(struct heap *heap, void *ptr, void *end, struct heap_table *tabl
 out:
     return res;
 }
+
+static uint32_t heap_align_value_to_upper(uint32_t val)
+{
+    if ((val % SOS_HEAP_BLOCK_SIZE == 0))
+    {
+        return val;
+    }
+
+    val = (val - (val - SOS_HEAP_BLOCK_SIZE));
+    val += SOS_HEAP_BLOCK_SIZE;
+    return val;
+}
+
+void *heap_malloc(size_t size)
+{
+    return 0;
+}
+
+void *heap_free(void *ptr)
+{
+    return 0;
+}
