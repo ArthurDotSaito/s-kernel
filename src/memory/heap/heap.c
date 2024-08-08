@@ -117,6 +117,22 @@ void *heap_block_to_address(struct heap *heap, int block)
 void *heap_mark_blocks_taken(struct heap *heap, int start_block, int total_blocks)
 {
     int end_block = (start_block + total_blocks) - 1;
+
+    HEAP_BLOCK_TABLE_ENTRY entry = HEAP_BLOCK_TABLE_ENTRY_TAKEN | HEAP_BLOCK_IS_FIRST;
+    if (total_blocks > 1)
+    {
+        entry |= HEAP_BLOCK_HAS_NEXT;
+    }
+
+    for (int i = start_block; i <= end_block; i++)
+    {
+        heap->table->entries[i] = entry;
+        entry = HEAP_BLOCK_TABLE_ENTRY_TAKEN;
+        if (i != end_block - 1)
+        {
+            entry |= HEAP_BLOCK_HAS_NEXT;
+        }
+    }
 }
 
 void *heap_malloc_blocks(struct heap *heap, uint32_t total_blocks)
@@ -149,5 +165,4 @@ void *heap_malloc(struct heap *heap, size_t size)
 
 void *heap_free(struct heap *heap, void *ptr)
 {
-    return 0;
 }
