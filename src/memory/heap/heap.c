@@ -49,7 +49,7 @@ int heap_create(struct heap *heap, void *ptr, void *end, struct heap_table *tabl
     }
 
     size_t table_size = sizeof(HEAP_BLOCK_TABLE_ENTRY) * table->total;
-    memset(table->entries, HEAP_BLOCK_ENTRY_FREE, table_size);
+    memset(table->entries, HEAP_BLOCK_TABLE_ENTRY_FREE, table_size);
 
 out:
     return res;
@@ -80,7 +80,7 @@ int heap_get_start_block(struct heap *heap, uint32_t total_blocks)
 
     for (size_t i = 0; i < table->total; i++)
     {
-        if (heap_get_entry_type(table->entries[i] != HEAP_BLOCK_ENTRY_FREE))
+        if (heap_get_entry_type(table->entries[i]) != HEAP_BLOCK_TABLE_ENTRY_FREE)
         {
             current_block = 0;
             start_block = -1;
@@ -114,7 +114,7 @@ void *heap_block_to_address(struct heap *heap, int block)
     return heap->saddr + (block * SOS_HEAP_BLOCK_SIZE);
 }
 
-void *heap_mark_blocks_taken(struct heap *heap, int start_block, int total_blocks)
+void heap_mark_blocks_taken(struct heap *heap, int start_block, int total_blocks)
 {
     int end_block = (start_block + total_blocks) - 1;
 
@@ -163,6 +163,6 @@ void *heap_malloc(struct heap *heap, size_t size)
     return heap_malloc_blocks(heap, total_blocks);
 }
 
-void *heap_free(struct heap *heap, void *ptr)
+void heap_free(struct heap *heap, void *ptr)
 {
 }
