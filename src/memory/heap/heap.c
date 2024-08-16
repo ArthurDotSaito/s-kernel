@@ -49,7 +49,7 @@ int heap_create(struct heap *heap, void *ptr, void *end, struct heap_table *tabl
     }
 
     size_t table_size = sizeof(HEAP_BLOCK_TABLE_ENTRY) * table->total;
-    memset(table->entries, HEAP_BLOCK_ENTRY_FREE, table_size);
+    memset(table->entries, HEAP_BLOCK_TABLE_ENTRY_FREE, table_size);
 
 out:
     return res;
@@ -80,7 +80,7 @@ int heap_get_start_block(struct heap *heap, uint32_t total_blocks)
 
     for (size_t i = 0; i < table->total; i++)
     {
-        if (heap_get_entry_type(table->entries[i]) != HEAP_BLOCK_ENTRY_FREE)
+        if (heap_get_entry_type(table->entries[i]) != HEAP_BLOCK_TABLE_ENTRY_FREE)
         {
             current_block = 0;
             start_block = -1;
