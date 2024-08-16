@@ -62,7 +62,7 @@ static uint32_t heap_align_value_to_upper(uint32_t val)
         return val;
     }
 
-    val = (val - (val - SOS_HEAP_BLOCK_SIZE));
+    val = (val - (val % SOS_HEAP_BLOCK_SIZE));
     val += SOS_HEAP_BLOCK_SIZE;
     return val;
 }
