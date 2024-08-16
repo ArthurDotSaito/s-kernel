@@ -75,4 +75,10 @@ void kernel_main()
 
     // load the Interrupt Descriptor Table
     idt_init();
+
+    void *ptr = kmalloc(50);
+    void *ptr2 = kmalloc(500);
+    if (ptr || ptr2)
+    {
+    }
 }

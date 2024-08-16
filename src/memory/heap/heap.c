@@ -114,7 +114,7 @@ void *heap_block_to_address(struct heap *heap, int block)
     return heap->saddr + (block * SOS_HEAP_BLOCK_SIZE);
 }
 
-void *heap_mark_blocks_taken(struct heap *heap, int start_block, int total_blocks)
+void heap_mark_blocks_taken(struct heap *heap, int start_block, int total_blocks)
 {
     int end_block = (start_block + total_blocks) - 1;
 
@@ -163,6 +163,6 @@ void *heap_malloc(struct heap *heap, size_t size)
     return heap_malloc_blocks(heap, total_blocks);
 }
 
-void *heap_free(struct heap *heap, void *ptr)
+void heap_free(struct heap *heap, void *ptr)
 {
 }
