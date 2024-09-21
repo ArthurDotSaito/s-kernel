@@ -19,7 +19,7 @@ out:
     return res;
 }
 
-static int heap_validate_alignment(void *ptr)
+static bool heap_validate_alignment(void *ptr)
 {
     return ((unsigned int)ptr % SOS_HEAP_BLOCK_SIZE) == 0;
 }
@@ -57,7 +57,7 @@ out:
 
 static uint32_t heap_align_value_to_upper(uint32_t val)
 {
-    if ((val % SOS_HEAP_BLOCK_SIZE == 0))
+    if ((val % SOS_HEAP_BLOCK_SIZE) == 0)
     {
         return val;
     }
@@ -165,4 +165,5 @@ void *heap_malloc(struct heap *heap, size_t size)
 
 void heap_free(struct heap *heap, void *ptr)
 {
+    return 0;
 }
