@@ -73,12 +73,18 @@ void kernel_main()
     terminal_initialize();
     print("Hello World\ntest");
 
+    // Start the heap
+    kheap_init();
+
     // load the Interrupt Descriptor Table
     idt_init();
 
     void *ptr = kmalloc(50);
-    void *ptr2 = kmalloc(500);
-    if (ptr || ptr2)
+    void *ptr2 = kmalloc(5000);
+    void *ptr3 = kmalloc(5600);
+    kfree(ptr);
+    void *ptr4 = kmalloc(50);
+    if (ptr || ptr2 || ptr3 || ptr4)
     {
     }
 }
