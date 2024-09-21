@@ -19,7 +19,7 @@ out:
     return res;
 }
 
-static int heap_validate_alignment(void *ptr)
+static bool heap_validate_alignment(void *ptr)
 {
     return ((unsigned int)ptr % SOS_HEAP_BLOCK_SIZE) == 0;
 }
@@ -57,12 +57,12 @@ out:
 
 static uint32_t heap_align_value_to_upper(uint32_t val)
 {
-    if ((val % SOS_HEAP_BLOCK_SIZE == 0))
+    if ((val % SOS_HEAP_BLOCK_SIZE) == 0)
     {
         return val;
     }
 
-    val = (val - (val - SOS_HEAP_BLOCK_SIZE));
+    val = (val - (val % SOS_HEAP_BLOCK_SIZE));
     val += SOS_HEAP_BLOCK_SIZE;
     return val;
 }
@@ -95,7 +95,7 @@ int heap_get_start_block(struct heap *heap, uint32_t total_blocks)
 
         current_block++;
 
-        if (start_block == total_blocks)
+        if (current_block == total_blocks)
         {
             break;
         }
@@ -154,6 +154,25 @@ out:
     return address;
 }
 
+void heap_marks_blocks_free(struct heap *heap, int starting_block)
+{
+    struct heap_table *table = heap->table;
+    for (int i = starting_block; i < (int)table->total; i++)
+    {
+        HEAP_BLOCK_TABLE_ENTRY entry = table->entries[i];
+        table->entries[i] = HEAP_BLOCK_TABLE_ENTRY_FREE;
+        if (!(entry & HEAP_BLOCK_HAS_NEXT))
+        {
+            break;
+        }
+    }
+}
+
+int heap_address_to_block(struct heap *heap, void *address)
+{
+    return ((int)(address - heap->saddr)) / SOS_HEAP_BLOCK_SIZE;
+}
+
 void *heap_malloc(struct heap *heap, size_t size)
 {
     size_t aligned_size = heap_align_value_to_upper(size);
@@ -165,4 +184,5 @@ void *heap_malloc(struct heap *heap, size_t size)
 
 void heap_free(struct heap *heap, void *ptr)
 {
+    heap_marks_blocks_free(heap, heap_address_to_block(heap, ptr));
 }

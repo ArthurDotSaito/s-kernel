@@ -4,7 +4,6 @@
 #include "kernel.h"
 
 struct heap kernel_heap;
-
 struct heap_table kernel_heap_table;
 
 void kheap_init()
@@ -24,4 +23,9 @@ void kheap_init()
 void *kmalloc(size_t size)
 {
     return heap_malloc(&kernel_heap, size);
+}
+
+void kfree(void *ptr)
+{
+    heap_free(&kernel_heap, ptr);
 }
