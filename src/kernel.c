@@ -87,4 +87,7 @@ void kernel_main()
     if (ptr || ptr2 || ptr3 || ptr4)
     {
     }
+
+    // Enable the system interrupts
+    enable_interrupts();
 }
